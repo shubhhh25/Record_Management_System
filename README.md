@@ -1,67 +1,82 @@
 Student Record Management System
 
-A simple console-based mini project in Python for managing student records — built to demonstrate core programming concepts: data types, conditionals, loops, functions, exception handling, file I/O, data structures, and a menu-driven design.
+A menu-driven console application built in Python for managing student records — Add, View, Search, Update, Delete, and Export, with data saved permanently between runs.
 
-Submitted By
-Shubham Eknath Sukhadare
-Soham Choudhari — Roll No. 52
-
-Course: Master of Computer Applications (MCA) Subject: Python Programming — Mini Project
+Author: Shubham Eknath Sukhadare
+Roll No : 53
+Course: MCA — Mini Project (Console Record-Management Application)
 
 Features
-Add a new student record (with duplicate ID check)
-View all student records
-Search for a student by ID
-Update an existing student's details
-Delete a student record
-Data is saved permanently to a JSON file, so records persist across runs
+Add Record — add a new student with duplicate-ID and empty-field checks
+View Records — display every stored student record
+Search Record — look up a single student by Student ID
+Update Record — edit an existing student's details (leave a field blank to keep its current value)
+Delete Record — remove a record, with a yes/n confirmation prompt
+Export Records to Excel — save all records into a formatted students_report.xlsx file
+Persistent storage — records are saved to students.json and automatically reloaded the next time the program runs
+Input validation & exception handling — invalid ages, invalid menu choices, missing/corrupted files, and non-existent IDs are all handled gracefully
 Requirements
-Python 3.x (no external libraries needed — only built-in json and os modules)
-How to Run
-Make sure student_records.py is in a folder you can write to (the program creates a students.json file next to it).
-Open a terminal in that folder and run:
+Python 3.7 or later
+openpyxl (only needed for the Excel export feature)
+
+Install the one external dependency with:
+
 bash
-   python student_records.py
-Follow the on-screen menu:
-   ===== Student Record Management System =====
-   1. Add Student Record
-   2. View All Records
+pip install openpyxl
+
+(Everything else — json, os — comes built into Python.)
+
+How to Run
+Make sure student_record_manager.py is in a folder by itself (or alongside students.json if you already have one).
+Open a terminal in that folder.
+Run:
+bash
+   python student_record_manager.py
+
+(Use python3 instead of python if that's what your system requires.)
+
+Use the on-screen menu to manage records:
+   1. Add Record
+   2. View Records
    3. Search Record
    4. Update Record
    5. Delete Record
-   6. Exit
-Enter the number of the action you want, then follow the prompts.
+   6. Export Records to Excel
+   7. Exit
+
+To run it again later, just repeat step 3 — your previously saved records will load automatically from students.json.
+
 Data Storage
 
-All records are stored in students.json, created automatically in the same folder the first time you add a record. Example:
+Each student record is stored as a dictionary with these fields:
+
+Field	Type	Notes
+id	str	Unique Student ID
+name	str	Student's full name
+age	int	Whole number, 1–100
+course	str	Course name
+email	str	Email address
+phone	str	Stored as text (not used in math)
+
+All records together are stored as a list of dictionaries, saved to students.json in this format:
 
 json
-{
-    "101": {
-        "name": "Aarav Sharma",
+[
+    {
+        "id": "101",
+        "name": "Riya Sharma",
+        "age": 22,
         "course": "MCA",
-        "marks": 88.5
+        "email": "riya@example.com",
+        "phone": "9876543210"
     }
-}
-The outer key is the Student ID.
-Each value is a dictionary holding name, course, and marks.
-The file is safely reloaded on every run — if it doesn't exist yet, the program just starts with an empty record set instead of crashing.
-Project Structure
-student_records.py   → main program (all logic)
-students.json         → auto-created data file (holds saved records)
-Code Overview
-Function	Purpose
-load_data()	Reads records from students.json into a dictionary; returns an empty dictionary if the file doesn't exist or is corrupted
-save_data()	Writes the current records dictionary back to students.json
-add_record()	Adds a new student, after checking the ID isn't already used and the marks are a valid number
-view_records()	Displays all records in a formatted table
-search_record()	Looks up and displays one student by ID
-update_record()	Edits an existing student's name, course, and/or marks
-delete_record()	Removes a student record, with a y/n confirmation
-show_menu()	Prints the menu options
-main()	Runs the menu loop and dispatches to the right function based on user choice
-Error Handling
-Entering non-numeric text for Marks is caught and reported without crashing the program.
-An empty or corrupted students.json file is handled gracefully — the program starts fresh instead of failing.
-Attempting to add a duplicate Student ID is blocked with a clear error message.
-Attempting to search, update, or delete a Student ID that doesn't exist is reported instead of causing an error.
+]
+Files
+File	Purpose
+student_record_manager.py	Main program
+students.json	Auto-created — permanent storage for all records
+students_report.xlsx	Auto-created — generated when you use the Excel export option
+Notes
+If students.json doesn't exist yet, the program starts with zero records instead of crashing.
+If students.json is corrupted or contains invalid data, the program warns you and starts fresh rather than failing.
+The Excel export (option 6) requires openpyxl. If it isn't installed, the program shows a clear message instead of crashing.
